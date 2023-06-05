@@ -5,13 +5,14 @@
   import Im4 from "$lib/assets/Jazz/4.jpg";
   import Im5 from "$lib/assets/Jazz/5.jpg";
   import Im6 from "$lib/assets/Jazz/6.jpg";
-  import { trackName, audio, trackPlaying } from "./stores";
+  import { trackName, audio, trackPlaying, section } from "./stores";
 
   import Train from "$lib/assets/Jazz/train.mp3";
   import Desafinado from "$lib/assets/Jazz/desafinado.mp3";
   import PlayBtn from "./play_btn.svelte";
   import Saos from "saos";
   import Narration from "$lib/assets/Jazz/Jazz_mixdown.mp3";
+  import { page } from '$app/stores';
 
   let trainAudio: HTMLAudioElement;
   let trainAudioPlaying = false;
@@ -65,6 +66,16 @@
       narrationAudioPlaying = true;
     }
   };
+  $: if ($section == "#jazz" && narrationAudio) {
+        handleNarrationAudio()
+    }
+  $: if (narrationAudio) {
+      narrationAudio.onended = function(){
+        handleNarrationAudio()
+        window.location.href = "#folk"
+        $section = "#folk"
+      }
+    }
   trackPlaying.subscribe((val) => {
     if ($audio == trainAudio) {
       trainAudioPlaying = val;
@@ -80,6 +91,7 @@
 
 <div
   class="section h-screen w-screen flex flex-col items-center bg-slate-200 p-10 justify-center"
+  id="jazz"
 >
   <audio src={Train} preload="auto" bind:this={trainAudio} hidden controls>
     <track kind="captions" />

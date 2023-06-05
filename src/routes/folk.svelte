@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { trackName, audio, trackPlaying } from "./stores";
+  import { trackName, audio, trackPlaying, section } from "./stores";
 
   import Im1 from "$lib/assets/Folk/1.jpg";
   import Im2 from "$lib/assets/Folk/2.jpg";
@@ -13,6 +13,7 @@
   import PlayBtn from "./play_btn.svelte";
 
   import Narration from "$lib/assets/Folk/Folk_mixdown.mp3";
+  import { page } from '$app/stores';
 
   let foxAudio: HTMLAudioElement;
   let foxAudioPlaying = false;
@@ -48,6 +49,17 @@
       narrationAudioPlaying = true;
     }
   };
+  $: if ($section == "#folk" && narrationAudio) {
+        handleNarrationAudio()
+    }
+  $: if (narrationAudio) {
+    console.log("loaded narration audio")
+      narrationAudio.onended = function(){
+        handleNarrationAudio()
+        window.location.href = "#riots"
+        $section = "#riots"
+      }
+    }
   trackPlaying.subscribe((val) => {
     if ($audio == foxAudio) {
       foxAudioPlaying = val;
@@ -60,6 +72,7 @@
 
 <div
   class="section h-screen w-screen flex flex-col items-center bg-slate-200 p-10 justify-center"
+  id="folk"
 >
   <audio src={Fox} preload="auto" bind:this={foxAudio} hidden controls>
     <track kind="captions" />

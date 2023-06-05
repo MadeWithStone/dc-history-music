@@ -8,6 +8,7 @@
   import PlayBtn from "./play_btn.svelte";
   import Stars from "$lib/assets/Military/stars.mp3";
   import Saos from "saos";
+  import { section } from "./stores";
 </script>
 
 <div
@@ -43,7 +44,10 @@
             individual songs at the top of each section.
           </p>
           <div>
-            <PlayBtn trackName="Play" onClick={() => {}} />
+            <PlayBtn trackName="Play" onClick={() => {
+              window.location.href = "#military"
+              $section = "#military"
+              }} />
           </div>
         </div>
         <div />

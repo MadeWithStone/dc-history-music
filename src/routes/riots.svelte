@@ -6,12 +6,14 @@
   import Im5 from "$lib/assets/1968/5.jpg";
   import Im6 from "$lib/assets/1968/6.jfif";
   import Im7 from "$lib/assets/1968/7.jpg";
-  import { trackName, audio, trackPlaying } from "./stores";
+  import { trackName, audio, trackPlaying, section } from "./stores";
 
   import Jungle from "$lib/assets/1968/jungle.mp3";
   import Saos from "saos";
   import PlayBtn from "./play_btn.svelte";
   import Narration from "$lib/assets/1968/Riots_mixdown.mp3";
+  import { page } from '$app/stores';
+
 
   let jungleAudio: HTMLAudioElement;
   let jungleAudioPlaying = false;
@@ -48,6 +50,16 @@
       narrationAudioPlaying = true;
     }
   };
+  $: if ($section == "#riots" && narrationAudio) {
+        handleNarrationAudio()
+    }
+  $: if (narrationAudio) {
+      narrationAudio.onended = function(){
+        handleNarrationAudio()
+        window.location.href = "#gogo"
+        $section = "gogo"
+      }
+    }
   trackPlaying.subscribe((val) => {
     if ($audio == jungleAudio) {
       jungleAudioPlaying = val;
@@ -60,6 +72,7 @@
 
 <div
   class="section h-screen w-screen flex flex-col items-center bg-slate-200 p-10 justify-center"
+  id="riots"
 >
   <audio src={Jungle} preload="auto" bind:this={jungleAudio} hidden controls>
     <track kind="captions" />

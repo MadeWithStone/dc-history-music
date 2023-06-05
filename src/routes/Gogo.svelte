@@ -5,12 +5,13 @@
   import Im4 from "$lib/assets/Go-go/4.webp";
   import Im5 from "$lib/assets/Go-go/5.jpg";
   import Im6 from "$lib/assets/Go-go/6.webp";
-  import { trackName, audio, trackPlaying } from "./stores";
+  import { trackName, audio, trackPlaying, section } from "./stores";
 
   import Gogo from "$lib/assets/Go-go/gogo.mp3";
   import Saos from "saos";
   import PlayBtn from "./play_btn.svelte";
   import Narration from "$lib/assets/Go-go/Gogo_mixdown.mp3";
+  import { page } from '$app/stores';
 
   let gogoAudio: HTMLAudioElement;
   let gogoAudioPlaying = false;
@@ -47,6 +48,9 @@
       narrationAudioPlaying = true;
     }
   };
+  $: if ($section == "#gogo" && narrationAudio) {
+        handleNarrationAudio()
+    }
   trackPlaying.subscribe((val) => {
     if ($audio == gogoAudio) {
       gogoAudioPlaying = $trackPlaying;
@@ -59,6 +63,7 @@
 
 <div
   class="section h-screen w-screen flex flex-col items-center bg-slate-200 p-10 justify-center"
+  id="gogo"
 >
   <audio src={Gogo} preload="auto" bind:this={gogoAudio} hidden controls>
     <track kind="captions" />

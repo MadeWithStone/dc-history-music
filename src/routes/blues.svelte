@@ -1,6 +1,6 @@
 <script lang="ts">
   import Saos from "saos";
-  import { trackName, audio, trackPlaying } from "./stores";
+  import { trackName, audio, trackPlaying, section } from "./stores";
 
   import Im1 from "$lib/assets/Blues/blues-skip-james-john-hurt.jpg";
   import Im2 from "$lib/assets/Blues/download (1).jfif";
@@ -11,6 +11,7 @@
   import PlayBtn from "./play_btn.svelte";
   import Doctor from "$lib/assets/Blues/doctor.mp3";
   import Narration from "$lib/assets/Blues/Blues_mixdown.mp3";
+  import { page } from '$app/stores';
 
   let doctorAudio: HTMLAudioElement;
   let doctorAudioPlaying = false;
@@ -46,6 +47,16 @@
       narrationAudioPlaying = true;
     }
   };
+  $: if ($section == "#blues" && narrationAudio) {
+        handleNarrationAudio()
+    }
+  $: if (narrationAudio) {
+      narrationAudio.onended = function(){
+        handleNarrationAudio()
+        window.location.href = "#jazz"
+        $section = "jazz"
+      }
+    }
   trackPlaying.subscribe((val) => {
     if ($audio == doctorAudio) {
       doctorAudioPlaying = val;
@@ -58,6 +69,7 @@
 
 <div
   class="section h-screen w-screen flex flex-col items-center bg-slate-200 p-10 justify-center"
+  id="blues"
 >
   <audio src={Doctor} preload="auto" bind:this={doctorAudio} hidden controls>
     <track kind="captions" />

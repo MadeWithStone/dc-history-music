@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { trackName, audio, trackPlaying } from "./stores";
+  import { trackName, audio, trackPlaying, section } from "./stores";
   import Jps from "$lib/assets/Military/jps.jpg";
   import Marine from "$lib/assets/Military/marine.jpg";
   import Vintage from "$lib/assets/Military/vintage.jpg";
@@ -10,6 +10,7 @@
   import Stars from "$lib/assets/Military/stars.mp3";
   import Saos from "saos";
   import Narration from "$lib/assets/Military/Military_mixdown.mp3";
+  import { page } from '$app/stores';
 
   let starsAudio: HTMLAudioElement;
   let starsAudioPlaying = false;
@@ -46,6 +47,22 @@
       narrationAudioPlaying = true;
     }
   };
+  
+  $: if ($section == "#military" && narrationAudio) {
+      console.log("Military path")
+        handleNarrationAudio()
+    }
+  $: if (narrationAudio) {
+    console.log("loaded narration audio")
+      narrationAudio.onended = function(){
+        handleNarrationAudio()
+        window.location.href = "#blues"
+        $section = "#blues"
+      }
+    }
+    
+  
+  
   trackPlaying.subscribe((val) => {
     if ($audio == starsAudio) {
       starsAudioPlaying = val;
@@ -58,6 +75,7 @@
 
 <div
   class="section h-screen w-screen flex flex-col items-center bg-slate-200 p-10 justify-center"
+  id="military"
 >
   <audio src={Stars} preload="auto" bind:this={starsAudio} hidden controls>
     <track kind="captions" />
