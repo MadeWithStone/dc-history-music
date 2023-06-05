@@ -8,7 +8,7 @@
   import Im5 from "$lib/assets/Folk/5.jpg";
   import Im6 from "$lib/assets/Folk/6.jpeg";
 
-  import Fox from "$lib/assets/folk/fox.mp3";
+  import Fox from "$lib/assets/Folk/fox.mp3";
   import Saos from "saos";
   import PlayBtn from "./play_btn.svelte";
 
