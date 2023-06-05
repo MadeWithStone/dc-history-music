@@ -57,7 +57,7 @@
       narrationAudio.onended = function(){
         handleNarrationAudio()
         window.location.href = "#gogo"
-        $section = "gogo"
+        $section = "#gogo"
       }
     }
   trackPlaying.subscribe((val) => {

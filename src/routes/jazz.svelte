@@ -148,8 +148,7 @@
             {/if}
           </div>
           <p class="text-lg font-Jazz font-normal">
-            Duke Ellington, Charlie Parker, and Ella Fitzgerald, and Charlie
-            Byrd
+            Duke Ellington, Charlie Parker, Ella Fitzgerald, and Charlie Byrd
           </p>
         </div>
         <div />

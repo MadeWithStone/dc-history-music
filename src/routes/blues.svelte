@@ -54,7 +54,7 @@
       narrationAudio.onended = function(){
         handleNarrationAudio()
         window.location.href = "#jazz"
-        $section = "jazz"
+        $section = "#jazz"
       }
     }
   trackPlaying.subscribe((val) => {
