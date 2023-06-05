@@ -1,2 +1,19 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+  import Military from "./military.svelte";
+  import Blues from "./blues.svelte";
+  import Jazz from "./jazz.svelte";
+  import Folk from "./folk.svelte";
+  import Riots from "./riots.svelte";
+  import Gogo from "./Gogo.svelte";
+  import Navbar from "./navbar.svelte";
+  import Title from "./title.svelte";
+</script>
+
+<Navbar />
+<Title />
+<Military />
+<Blues />
+<Jazz />
+<Folk />
+<Riots />
+<Gogo />
