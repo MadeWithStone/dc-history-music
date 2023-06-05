@@ -9,6 +9,7 @@
   import PlayBtn from "./play_btn.svelte";
   import Stars from "$lib/assets/Military/stars.mp3";
   import Saos from "saos";
+  import Narration from "$lib/assets/Military/Military_mixdown.mp3";
 
   let starsAudio: HTMLAudioElement;
   let starsAudioPlaying = false;
@@ -19,16 +20,38 @@
       starsAudioPlaying = false;
     } else {
       if ($audio) $audio.pause();
+
+      $trackPlaying = false;
       starsAudio.play();
       $trackName = "Stars and Stripes Forever";
-      $trackPlaying = true;
       $audio = starsAudio;
+      $trackPlaying = true;
       starsAudioPlaying = true;
+    }
+  };
+  let narrationAudio: HTMLAudioElement;
+  let narrationAudioPlaying = false;
+  let handleNarrationAudio = () => {
+    if (narrationAudioPlaying) {
+      narrationAudio.pause();
+      $trackPlaying = false;
+      narrationAudioPlaying = false;
+    } else {
+      if ($audio) $audio.pause();
+      $trackPlaying = false;
+      narrationAudio.play();
+      $trackName = "Military Marches Narration";
+      $audio = narrationAudio;
+      $trackPlaying = true;
+      narrationAudioPlaying = true;
     }
   };
   trackPlaying.subscribe((val) => {
     if ($audio == starsAudio) {
       starsAudioPlaying = val;
+    }
+    if ($audio == narrationAudio) {
+      narrationAudioPlaying = val;
     }
   });
 </script>
@@ -36,6 +59,18 @@
 <div
   class="section h-screen w-screen flex flex-col items-center bg-slate-200 p-10 justify-center"
 >
+  <audio src={Stars} preload="auto" bind:this={starsAudio} hidden controls>
+    <track kind="captions" />
+  </audio>
+  <audio
+    src={Narration}
+    preload="auto"
+    bind:this={narrationAudio}
+    hidden
+    controls
+  >
+    <track kind="captions" />
+  </audio>
   <Saos animation={"fade-in 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
     <div
       class="max-w-screen-lg flex flex-col items-start w-full p-10 bg-gray-50 rounded-lg drop-shadow-md gap-5"
@@ -45,6 +80,13 @@
           <h1 class="text-8xl font-1800s font-medium">1800s</h1>
           <div class="flex gap-2.5">
             <h3 class="text-4xl font-1800s font-normal">Military Marches</h3>
+            {#if narrationAudio}
+              <PlayBtn
+                trackName="Narration"
+                playing={narrationAudioPlaying}
+                onClick={() => handleNarrationAudio()}
+              />
+            {/if}
             {#if starsAudio}
               <PlayBtn
                 trackName="Stars and Stripes Forever"
@@ -54,15 +96,6 @@
             {/if}
           </div>
           <p class="text-lg font-1800s font-normal">John Philip Sousa</p>
-          <audio
-            src={Stars}
-            preload="auto"
-            bind:this={starsAudio}
-            hidden
-            controls
-          >
-            <track kind="captions" />
-          </audio>
         </div>
         <div />
       </div>

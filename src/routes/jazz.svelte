@@ -11,6 +11,7 @@
   import Desafinado from "$lib/assets/Jazz/desafinado.mp3";
   import PlayBtn from "./play_btn.svelte";
   import Saos from "saos";
+  import Narration from "$lib/assets/Jazz/Jazz_mixdown.mp3";
 
   let trainAudio: HTMLAudioElement;
   let trainAudioPlaying = false;
@@ -21,18 +22,15 @@
       trainAudioPlaying = false;
     } else {
       if ($audio) $audio.pause();
+
+      $trackPlaying = false;
       trainAudio.play();
       $trackName = "Take the A Train";
-      $trackPlaying = true;
       $audio = trainAudio;
+      $trackPlaying = true;
       trainAudioPlaying = true;
     }
   };
-  trackPlaying.subscribe((val) => {
-    if ($audio == trainAudio) {
-      trainAudioPlaying = val;
-    }
-  });
   let desafinadoAudio: HTMLAudioElement;
   let desafinadoAudioPlaying = false;
   let handleDesafinadoAudio = () => {
@@ -42,16 +40,40 @@
       desafinadoAudioPlaying = false;
     } else {
       if ($audio) $audio.pause();
+      $trackPlaying = false;
       desafinadoAudio.play();
       $trackName = "Desafinado";
-      $trackPlaying = true;
       $audio = desafinadoAudio;
+      $trackPlaying = true;
       desafinadoAudioPlaying = true;
     }
   };
+  let narrationAudio: HTMLAudioElement;
+  let narrationAudioPlaying = false;
+  let handleNarrationAudio = () => {
+    if (narrationAudioPlaying) {
+      narrationAudio.pause();
+      $trackPlaying = false;
+      narrationAudioPlaying = false;
+    } else {
+      if ($audio) $audio.pause();
+      $trackPlaying = false;
+      narrationAudio.play();
+      $trackName = "Jazz Narration";
+      $audio = narrationAudio;
+      $trackPlaying = true;
+      narrationAudioPlaying = true;
+    }
+  };
   trackPlaying.subscribe((val) => {
+    if ($audio == trainAudio) {
+      trainAudioPlaying = val;
+    }
     if ($audio == desafinadoAudio) {
       desafinadoAudioPlaying = val;
+    }
+    if ($audio == narrationAudio) {
+      narrationAudioPlaying = val;
     }
   });
 </script>
@@ -59,6 +81,27 @@
 <div
   class="section h-screen w-screen flex flex-col items-center bg-slate-200 p-10 justify-center"
 >
+  <audio src={Train} preload="auto" bind:this={trainAudio} hidden controls>
+    <track kind="captions" />
+  </audio>
+  <audio
+    src={Desafinado}
+    preload="auto"
+    bind:this={desafinadoAudio}
+    hidden
+    controls
+  >
+    <track kind="captions" />
+  </audio>
+  <audio
+    src={Narration}
+    preload="auto"
+    bind:this={narrationAudio}
+    hidden
+    controls
+  >
+    <track kind="captions" />
+  </audio>
   <Saos animation={"fade-in 1s cubic-bezier(0.35, 0.5, 0.65, 0.95) both"}>
     <div
       class="max-w-screen-lg flex flex-col items-start w-full p-10 bg-gray-50 rounded-lg drop-shadow-md gap-5"
@@ -70,6 +113,13 @@
           </h1>
           <div class="flex gap-2.5">
             <h3 class="text-4xl font-Jazz font-normal">Jazz</h3>
+            {#if narrationAudio}
+              <PlayBtn
+                trackName="Narration"
+                playing={narrationAudioPlaying}
+                onClick={() => handleNarrationAudio()}
+              />
+            {/if}
             {#if trainAudio}
               <PlayBtn
                 trackName="Take the A Train"
@@ -89,24 +139,6 @@
             Duke Ellington, Charlie Parker, and Ella Fitzgerald, and Charlie
             Byrd
           </p>
-          <audio
-            src={Train}
-            preload="auto"
-            bind:this={trainAudio}
-            hidden
-            controls
-          >
-            <track kind="captions" />
-          </audio>
-          <audio
-            src={Desafinado}
-            preload="auto"
-            bind:this={desafinadoAudio}
-            hidden
-            controls
-          >
-            <track kind="captions" />
-          </audio>
         </div>
         <div />
       </div>
